@@ -1,0 +1,68 @@
+[gd_scene load_steps=12 format=3 uid="uid://hko81xwd174b"]
+
+[ext_resource type="Script" path="res://scenes/player/player.gd" id="1_tiy3c"]
+[ext_resource type="Script" path="res://scenes/state_machine/node_state_machine.gd" id="2_yl7gu"]
+[ext_resource type="Script" path="res://scenes/player/states/idle_player_state.gd" id="3_gjomo"]
+[ext_resource type="Script" path="res://scenes/player/states/walking_player_state.gd" id="4_g3fbo"]
+[ext_resource type="Script" path="res://scenes/player/states/falling_player_state.gd" id="5_nm8xy"]
+[ext_resource type="Script" path="res://scenes/player/states/jumping_player_state.gd" id="6_xaue5"]
+[ext_resource type="Script" path="res://scenes/player/states/double_jumping_player_state.gd" id="7_r6sy7"]
+[ext_resource type="Script" path="res://scenes/player/states/bhopping_player_state.gd" id="8_ww7k6"]
+[ext_resource type="Script" path="res://scenes/player/states/dashing_player_state.gd" id="9_iirro"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_extlj"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ufpka"]
+
+[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("CAMERA_CONTROLLER", "ANIMATION_PLAYER") groups=["player"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
+script = ExtResource("1_tiy3c")
+CAMERA_CONTROLLER = NodePath("Camera3D")
+ANIMATION_PLAYER = NodePath("AnimationPlayer")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." groups=["player"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
+mesh = SubResource("CapsuleMesh_extlj")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
+shape = SubResource("CapsuleShape3D_ufpka")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
+[node name="NodeStateMachine" type="Node" parent="." node_paths=PackedStringArray("CURRENT_STATE", "PLAYER")]
+unique_name_in_owner = true
+script = ExtResource("2_yl7gu")
+CURRENT_STATE = NodePath("IdlePlayerState")
+PLAYER = NodePath("..")
+
+[node name="IdlePlayerState" type="Node" parent="NodeStateMachine"]
+script = ExtResource("3_gjomo")
+
+[node name="WalkingPlayerState" type="Node" parent="NodeStateMachine"]
+script = ExtResource("4_g3fbo")
+SPEED = 12.0
+ACCELERATION = 0.8
+DECELERATION = 0.8
+
+[node name="FallingPlayerState" type="Node" parent="NodeStateMachine"]
+script = ExtResource("5_nm8xy")
+
+[node name="JumpingPlayerState" type="Node" parent="NodeStateMachine"]
+script = ExtResource("6_xaue5")
+
+[node name="DoubleJumpingPlayerState" type="Node" parent="NodeStateMachine"]
+script = ExtResource("7_r6sy7")
+
+[node name="BHoppingPlayerState" type="Node" parent="NodeStateMachine"]
+script = ExtResource("8_ww7k6")
+
+[node name="DashingPlayerState" type="Node" parent="NodeStateMachine"]
+script = ExtResource("9_iirro")
+SPEED = null
+ACCELERATION = null
+DECELERATION = null
+DASH_SPEED = null
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]

@@ -1,0 +1,49 @@
+[gd_scene load_steps=6 format=3 uid="uid://g0vjaxbhip86"]
+
+[ext_resource type="Script" path="res://components/jump_pad.gd" id="1_exs5r"]
+[ext_resource type="Shader" path="res://shaders/grid.gdshader" id="2_2wq3b"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_xsbv6"]
+height = 0.2
+radius = 1.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1hc00"]
+render_priority = 0
+shader = ExtResource("2_2wq3b")
+shader_parameter/subdivisions = 32.0
+shader_parameter/grid_width = 0.02
+shader_parameter/background_color = Color(0.2, 0.2, 0.2, 1)
+shader_parameter/background_color_two = Color(0.301961, 0.745098, 0.0666667, 1)
+shader_parameter/grid_color = Color(0.5, 0.5, 0.5, 1)
+shader_parameter/dashed_scale_x = 0.02
+shader_parameter/dashed_scale_y = 0.02
+shader_parameter/dashed_count_x = 1.0
+shader_parameter/dashed_count_y = 1.0
+shader_parameter/point_width = 0.021
+shader_parameter/point_color = Color(0, 0, 0, 1)
+shader_parameter/point_scale_x = 0.05
+shader_parameter/point_scale_y = 0.05
+shader_parameter/inside_width = 0.01
+shader_parameter/inside_subdivisions = 6.0
+shader_parameter/inside_color = Color(0.4, 0.4, 0.4, 1)
+shader_parameter/in_dashed_scale_x = 0.3
+shader_parameter/in_dashed_scale_y = 0.3
+shader_parameter/in_dashed_count_x = 6.0
+shader_parameter/in_dashed_count_y = 6.0
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_6kwqs"]
+material = SubResource("ShaderMaterial_1hc00")
+bottom_radius = 0.8
+height = 0.2
+
+[node name="JumpPad" type="Area3D"]
+script = ExtResource("1_exs5r")
+POWER = Vector3(50, 10, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.116931, 0)
+shape = SubResource("CylinderShape3D_xsbv6")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.116931, 0)
+mesh = SubResource("CylinderMesh_6kwqs")
